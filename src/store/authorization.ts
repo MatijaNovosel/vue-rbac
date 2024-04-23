@@ -1,4 +1,4 @@
-import { PERMISSIONS, PERMISSION_NAMES } from "@/constants/authorization";
+import { PERMISSIONS, RULES } from "@/constants/authorization";
 import { Rule, UserRuleDefinitionType } from "@/models/authorization";
 import { defineStore } from "pinia";
 import { ref } from "vue";
@@ -6,27 +6,27 @@ import { useRouter } from "vue-router";
 import { useUserStore } from "./user";
 
 export const useAuthorizationStore = defineStore("authorization", () => {
-  const rules = ref<Record<string, UserRuleDefinitionType>>({});
+  const rules = ref<Record<number, UserRuleDefinitionType>>({});
 
   const router = useRouter();
   const userStore = useUserStore();
 
-  const setRules = (value: Rule[]) => {
-    for (const { name, definition } of value) {
+  const setRules = (values: Rule[]) => {
+    for (const { name, definition } of values) {
       rules.value[name] = definition;
     }
   };
 
   const can = (ruleName: string) => {
-    if (userStore.user) {
-      return rules[ruleName](userStore.user);
+    if (userStore.user && rules.value[ruleName]) {
+      return rules.value[ruleName](userStore.user);
     }
     return false;
   };
 
   const cannot = (ruleName: string) => {
-    if (userStore.user) {
-      return !rules[ruleName](userStore.user);
+    if (userStore.user && rules.value[ruleName]) {
+      return !rules.value[ruleName](userStore.user);
     }
     return false;
   };
@@ -34,10 +34,16 @@ export const useAuthorizationStore = defineStore("authorization", () => {
   const defineRules = () => {
     const rules: Rule[] = [
       {
-        name: PERMISSION_NAMES[PERMISSIONS.CanViewArchive],
-        definition: (user) => {
-          return user.permissions.includes(PERMISSIONS.CanViewArchive);
-        }
+        name: RULES.CanViewArchive,
+        definition: (user) => user.permissions.includes(PERMISSIONS.CanViewArchive)
+      },
+      {
+        name: RULES.CanArchivePost,
+        definition: (user) => user.permissions.includes(PERMISSIONS.CanArchivePost)
+      },
+      {
+        name: RULES.CanDeletePost,
+        definition: (user) => user.permissions.includes(PERMISSIONS.CanDeletePost)
       }
     ];
     setRules(rules);

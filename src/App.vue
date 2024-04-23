@@ -34,8 +34,10 @@ import { useI18n } from "vue-i18n";
 import { useTheme } from "vuetify";
 import ConfirmationDialogProvider from "./components/confirmationDialog/ConfirmationDialogProvider.vue";
 import { useAppStore } from "./store/app";
+import { useAuthorizationStore } from "./store/authorization";
 
 const appStore = useAppStore();
+const authorizationStore = useAuthorizationStore();
 const i18n = useI18n();
 const theme = useTheme();
 const { loading } = storeToRefs(appStore);
@@ -43,5 +45,6 @@ const { loading } = storeToRefs(appStore);
 onMounted(() => {
   theme.global.name.value = appStore.darkMode ? "dark" : "light";
   i18n.locale.value = appStore.language;
+  authorizationStore.defineRules();
 });
 </script>

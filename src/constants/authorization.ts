@@ -4,8 +4,8 @@ export const PERMISSIONS = {
   CanDeletePost: 3
 };
 
-export const PERMISSION_NAMES = {
-  [PERMISSIONS.CanViewArchive]: "view CanViewArchive",
-  [PERMISSIONS.CanArchivePost]: "action CanArchivePost",
-  [PERMISSIONS.CanDeletePost]: "action CanDeletePost"
+export const RULES = {
+  CanViewArchive: "view CanViewArchive",
+  CanArchivePost: "action CanArchivePost",
+  CanDeletePost: "action CanDeletePost"
 };

@@ -22,7 +22,7 @@
               v-slot="{ field, errors }"
               v-model="state.username"
               name="username"
-              rules="required|username"
+              rules="required"
               :label="i18n.t('username')"
             >
               <v-text-field

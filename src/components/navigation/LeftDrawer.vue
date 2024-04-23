@@ -48,55 +48,59 @@
 </template>
 
 <script lang="ts" setup>
+import { RULES } from "@/constants/authorization";
 import ROUTE_NAMES from "@/router/routeNames";
 import { useAppStore } from "@/store/app";
+import { useAuthorizationStore } from "@/store/authorization";
 import { useUserStore } from "@/store/user";
 import { computed, reactive, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { useRouter } from "vue-router";
 import { useDisplay, useTheme } from "vuetify";
 
 const userStore = useUserStore();
 const appStore = useAppStore();
-const router = useRouter();
+const authorizationStore = useAuthorizationStore();
 const { mdAndUp } = useDisplay();
 const theme = useTheme();
 const i18n = useI18n();
 
 const state = reactive({
-  drawer: mdAndUp.value ? true : false,
-  rail: false
+  drawer: mdAndUp.value ? true : false
 });
 
-const navItems = computed(() => [
-  {
-    title: i18n.t("links.home"),
-    icon: "mdi-home-outline",
-    to: {
-      name: ROUTE_NAMES.HOME
+const navItems = computed(() => {
+  const res: any[] = [
+    {
+      title: i18n.t("links.home"),
+      icon: "mdi-home-outline",
+      to: {
+        name: ROUTE_NAMES.HOME
+      }
+    },
+    {
+      title: i18n.t("links.settings"),
+      icon: "mdi-cogs",
+      to: {
+        name: ROUTE_NAMES.SETTINGS
+      }
     }
-  },
-  {
-    title: "Archive",
-    icon: "mdi-archive-outline",
-    to: {
-      name: ROUTE_NAMES.ARCHIVE
-    }
-  },
-  {
-    title: i18n.t("links.settings"),
-    icon: "mdi-cogs",
-    to: {
-      name: ROUTE_NAMES.SETTINGS
-    }
+  ];
+
+  if (authorizationStore.can(RULES.CanViewArchive)) {
+    res.push({
+      title: "Archive",
+      icon: "mdi-archive-outline",
+      to: {
+        name: ROUTE_NAMES.ARCHIVE
+      }
+    });
   }
-]);
+
+  return res;
+});
 
 const logOut = () => {
   userStore.logOut();
-  router.push({
-    name: ROUTE_NAMES.NOT_FOUND
-  });
 };
 
 watch(
