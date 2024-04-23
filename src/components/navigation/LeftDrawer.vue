@@ -77,6 +77,13 @@ const navItems = computed(() => [
     }
   },
   {
+    title: "Archive",
+    icon: "mdi-archive-outline",
+    to: {
+      name: ROUTE_NAMES.ARCHIVE
+    }
+  },
+  {
     title: i18n.t("links.settings"),
     icon: "mdi-cogs",
     to: {

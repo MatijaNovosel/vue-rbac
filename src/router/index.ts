@@ -26,6 +26,15 @@ const routes: RouteRecordRaw[] = [
         }
       },
       {
+        path: "archive",
+        name: ROUTE_NAMES.ARCHIVE,
+        component: () => import("../views/Archive.vue"),
+        meta: {
+          title: "home.title",
+          auth: true
+        }
+      },
+      {
         path: "settings",
         name: ROUTE_NAMES.SETTINGS,
         component: () => import("../views/Settings.vue"),

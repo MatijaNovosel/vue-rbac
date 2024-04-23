@@ -1,6 +1,6 @@
-import { TokenModel } from "@/models/user";
+import { IUserAccount } from "@/models/user";
 
 export interface IAuthService {
-  signInWithEmailAndPassword(email: string, password: string): Promise<TokenModel>;
+  signIn(username: string): Promise<IUserAccount>;
   signOut(): Promise<void>;
 }

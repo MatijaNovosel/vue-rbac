@@ -4,14 +4,14 @@
     :order="1"
     v-model="state.drawer"
     :permanent="mdAndUp"
-    class="pa-5 right-drawer"
-    :class="theme.current.value.dark ? '' : 'bg-grey-lighten-4'"
+    class="pa-5"
   >
     <template #prepend>
       <v-text-field
         placeholder="Search"
         density="compact"
         hide-details
+        variant="filled"
         prepend-inner-icon="mdi-magnify"
         clearable
         :bg-color="theme.current.value.dark ? '' : 'white'"
@@ -42,10 +42,6 @@ watch(
 </script>
 
 <style scoped lang="scss">
-.right-drawer {
-  border: 0;
-}
-
 :deep(.v-navigation-drawer__content) {
   display: flex;
   flex-direction: column;

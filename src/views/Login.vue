@@ -20,49 +20,22 @@
           >
             <vv-field
               v-slot="{ field, errors }"
-              v-model="state.email"
-              name="email"
-              rules="required|email"
-              :label="i18n.t('email')"
+              v-model="state.username"
+              name="username"
+              rules="required|username"
+              :label="i18n.t('username')"
             >
               <v-text-field
-                type="email"
+                type="username"
                 :bg-color="theme.current.value.dark ? '' : 'white'"
                 v-bind="field"
                 clearable
                 variant="filled"
                 density="compact"
                 hide-details="auto"
-                prepend-icon="mdi-email-outline"
+                prepend-icon="mdi-username-outline"
                 :error-messages="errors"
-                :placeholder="i18n.t('email')"
-              />
-            </vv-field>
-          </v-col>
-          <v-col
-            cols="12"
-            class="my-1"
-          >
-            <vv-field
-              v-slot="{ field, errors }"
-              v-model="state.password"
-              name="password"
-              rules="required"
-              :label="i18n.t('password')"
-            >
-              <v-text-field
-                clearable
-                v-bind="field"
-                :bg-color="theme.current.value.dark ? '' : 'white'"
-                variant="filled"
-                density="compact"
-                hide-details="auto"
-                prepend-icon="mdi-lock-outline"
-                :error-messages="errors"
-                :append-inner-icon="state.showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                :type="state.showPassword ? 'text' : 'password'"
-                :placeholder="i18n.t('password')"
-                @click:append-inner="state.showPassword = !state.showPassword"
+                :placeholder="i18n.t('username')"
               />
             </vv-field>
           </v-col>
@@ -100,9 +73,7 @@ import { useRouter } from "vue-router";
 import { useDisplay, useTheme } from "vuetify";
 
 interface State {
-  showPassword: boolean;
-  email: string | null;
-  password: string | null;
+  username: string | null;
 }
 
 const loginForm = ref<IForm>();
@@ -115,14 +86,11 @@ const { smAndDown } = useDisplay();
 const { alert } = useNotifications();
 
 const state: State = reactive({
-  email: null,
-  password: null,
-  showPassword: false
+  username: null
 });
 
 const resetForm = () => {
-  state.email = null;
-  state.password = null;
+  state.username = null;
   if (loginForm.value) {
     loginForm.value?.resetForm();
   }
@@ -134,7 +102,7 @@ const login = async () => {
   }
   try {
     appStore.setLoading(true);
-    await userStore.login(state.email as string, state.password as string);
+    await userStore.login(state.username as string);
     router.push({
       name: ROUTE_NAMES.HOME
     });

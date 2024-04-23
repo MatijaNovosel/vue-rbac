@@ -11,7 +11,7 @@
     </v-row>
     <v-row class="text-center">
       <v-col cols="12">
-        <span class="text-h3"> Home </span>
+        <span class="text-h3"> Archive </span>
       </v-col>
     </v-row>
   </v-container>

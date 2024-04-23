@@ -1,4 +1,5 @@
-import { TokenModel } from "@/models/user";
+import { ADMIN_USER, DEV_USER } from "@/constants/user";
+import { IUserAccount } from "@/models/user";
 import { IAuthService } from "../interfaces/auth";
 
 export class AuthService implements IAuthService {
@@ -6,13 +7,11 @@ export class AuthService implements IAuthService {
     //
   }
 
-  async signInWithEmailAndPassword(email: string, password: string): Promise<TokenModel> {
-    return {
-      userId: "1",
-      expiresAt: 3_600,
-      refreshToken: "refreshToken",
-      expiresIn: 3_600, // 1h - 3600s
-      token: "accessToken"
-    };
+  async signIn(username: string): Promise<IUserAccount> {
+    if (username === "admin") {
+      return ADMIN_USER;
+    } else {
+      return DEV_USER;
+    }
   }
 }
