@@ -1,8 +1,10 @@
 <template>
   <v-layout>
     <alerts />
-    <left-drawer v-if="isAuthenticated" />
-    <right-drawer v-if="isAuthenticated" />
+    <template v-if="isAuthenticated">
+      <left-drawer />
+      <right-drawer />
+    </template>
     <v-main
       class="main"
       :class="theme.current.value.dark ? '' : 'bg-grey-lighten-4'"
