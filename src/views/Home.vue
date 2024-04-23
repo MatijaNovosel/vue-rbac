@@ -4,7 +4,7 @@
     <v-row v-if="state.loading">
       <v-progress-circular
         class="my-6 mx-auto"
-        color="orange"
+        color="green"
         size="50"
         indeterminate
       />

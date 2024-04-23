@@ -1,8 +1,10 @@
 import { AccountService } from "@/api/services/account";
 import { AuthService } from "@/api/services/auth";
 import { useNotifications } from "@/composables/useNotifications";
+import ROUTE_NAMES from "@/router/routeNames";
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
+import { useRouter } from "vue-router";
 import { IUserAccount, TokenModel } from "../models/user";
 import { useAppStore } from "./app";
 
@@ -25,6 +27,7 @@ export const useUserStore = defineStore(
 
     // Composables
     const { alert } = useNotifications();
+    const router = useRouter();
 
     const login = async (email: string, password: string): Promise<void> => {
       const response = await authService.signInWithEmailAndPassword(email, password);
@@ -55,10 +58,9 @@ export const useUserStore = defineStore(
       alert({
         text: "Signed out!"
       });
-    };
-
-    const deleteAccount = async () => {
-      await authService.deleteAccount();
+      router.replace({
+        name: ROUTE_NAMES.LOGIN
+      });
     };
 
     return {
@@ -69,8 +71,7 @@ export const useUserStore = defineStore(
       login,
       setToken,
       getUserData,
-      logOut,
-      deleteAccount
+      logOut
     };
   },
   {

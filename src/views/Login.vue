@@ -66,21 +66,14 @@
               />
             </vv-field>
           </v-col>
-          <v-col cols="12">
-            <v-checkbox
-              color="orange"
-              hide-details
-              :label="i18n.t('rememberMe')"
-            />
-          </v-col>
           <v-col
             cols="12"
-            class="text-center mb-4"
+            class="text-center my-4"
           >
             <v-btn
               variant="flat"
               type="submit"
-              color="orange-darken-1"
+              color="green-darken-1"
               rounded="md"
             >
               {{ i18n.t("login") }}

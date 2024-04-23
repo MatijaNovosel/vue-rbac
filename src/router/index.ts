@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
+import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import MainLayout from "../layouts/Main.vue";
 import { useUserStore } from "../store/user";
 import ROUTE_NAMES from "./routeNames";
@@ -36,7 +36,7 @@ const routes: RouteRecordRaw[] = [
       },
       {
         path: "/:pathMatch(.*)*",
-        name: "NotFound",
+        name: ROUTE_NAMES.NOT_FOUND,
         component: () => import("../views/NotFound.vue")
       }
     ]
@@ -45,17 +45,17 @@ const routes: RouteRecordRaw[] = [
 
 const router = createRouter({
   routes,
-  history: createWebHashHistory(import.meta.env.BASE_URL),
+  history: createWebHistory(import.meta.env.BASE_URL),
   linkExactActiveClass: "nav-item active"
 });
 
 router.beforeEach((to, _, next) => {
   const userStore = useUserStore();
-  if (userStore.user && to.name === ROUTE_NAMES.LOGIN) {
+  if (userStore.isAuthenticated && to.name === ROUTE_NAMES.LOGIN) {
     next({
       name: ROUTE_NAMES.HOME
     });
-  } else if (!userStore.user && to.meta.auth) {
+  } else if (!userStore.isAuthenticated && to.meta.auth) {
     next({
       name: ROUTE_NAMES.LOGIN
     });

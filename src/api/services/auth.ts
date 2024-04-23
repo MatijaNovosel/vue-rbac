@@ -6,10 +6,6 @@ export class AuthService implements IAuthService {
     //
   }
 
-  async deleteAccount(): Promise<void> {
-    //
-  }
-
   async signInWithEmailAndPassword(email: string, password: string): Promise<TokenModel> {
     return {
       userId: "1",

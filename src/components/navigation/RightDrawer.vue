@@ -9,7 +9,7 @@
   >
     <template #prepend>
       <v-text-field
-        :placeholder="i18n.t('searchMemos')"
+        placeholder="Search"
         density="compact"
         hide-details
         prepend-inner-icon="mdi-magnify"

@@ -20,22 +20,6 @@ export const LANGUAGE_OPTIONS = computed(() => [
   {
     title: i18n.global.t("languages.hr"),
     value: "hr"
-  },
-  {
-    title: i18n.global.t("languages.de"),
-    value: "de"
-  },
-  {
-    title: i18n.global.t("languages.ja"),
-    value: "ja"
-  },
-  {
-    title: i18n.global.t("languages.cn"),
-    value: "cn"
-  },
-  {
-    title: i18n.global.t("languages.ua"),
-    value: "ua"
   }
 ]);
 

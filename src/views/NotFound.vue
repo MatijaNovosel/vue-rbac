@@ -8,7 +8,7 @@
       :to="{
         name: ROUTE_NAMES.HOME
       }"
-      color="orange-darken-1"
+      color="green-darken-1"
     >
       Home
     </v-btn>
