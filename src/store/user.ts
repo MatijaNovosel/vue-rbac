@@ -19,7 +19,6 @@ export const useUserStore = defineStore(
 
     // Stores
     const appStore = useAppStore();
-    const userStore = useUserStore();
 
     // Composables
     const { alert } = useNotifications();
