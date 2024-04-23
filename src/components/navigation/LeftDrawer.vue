@@ -86,7 +86,7 @@ const navItems = computed(() => {
     }
   ];
 
-  if (authorizationStore.can(RULES.CanViewArchive)) {
+  if (authorizationStore.can(RULES.CanViewArchive).do) {
     res.push({
       title: "Archive",
       icon: "mdi-archive-outline",

@@ -1,6 +1,8 @@
+import { RULES } from "@/constants/authorization";
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import MainLayout from "../layouts/Main.vue";
 import { useUserStore } from "../store/user";
+import { useAuthorizationStore } from "./../store/authorization";
 import ROUTE_NAMES from "./routeNames";
 
 const routes: RouteRecordRaw[] = [
@@ -31,6 +33,10 @@ const routes: RouteRecordRaw[] = [
         component: () => import("../views/Archive.vue"),
         meta: {
           title: "home.title",
+          can: RULES.CanViewArchive,
+          onDeniedRoute: {
+            name: ROUTE_NAMES.NOT_FOUND
+          },
           auth: true
         }
       },
@@ -42,6 +48,11 @@ const routes: RouteRecordRaw[] = [
           title: "settings.title",
           auth: true
         }
+      },
+      {
+        path: "no-permissions",
+        name: ROUTE_NAMES.NO_PERMISSIONS,
+        component: () => import("../views/NoPermissions.vue")
       },
       {
         path: "/:pathMatch(.*)*",
@@ -59,17 +70,19 @@ const router = createRouter({
 });
 
 router.beforeEach((to, _, next) => {
+  const authorizationStore = useAuthorizationStore();
   const userStore = useUserStore();
-  if (userStore.isAuthenticated && to.name === ROUTE_NAMES.LOGIN) {
-    next({
-      name: ROUTE_NAMES.HOME
-    });
-  } else if (!userStore.isAuthenticated && to.meta.auth) {
-    next({
-      name: ROUTE_NAMES.LOGIN
-    });
-  } else {
+  const isAuthenticated = userStore.isAuthenticated;
+
+  if (
+    to.meta.can == null ||
+    (isAuthenticated && authorizationStore.can(to.meta.can as string).do)
+  ) {
     next();
+  } else if (!isAuthenticated) {
+    next({ name: ROUTE_NAMES.LOGIN });
+  } else {
+    next({ name: ROUTE_NAMES.NO_PERMISSIONS });
   }
 });
 

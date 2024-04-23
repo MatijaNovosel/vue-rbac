@@ -2,33 +2,59 @@ import { PERMISSIONS, RULES } from "@/constants/authorization";
 import { Rule, UserRuleDefinitionType } from "@/models/authorization";
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import { useRouter } from "vue-router";
 import { useUserStore } from "./user";
 
 export const useAuthorizationStore = defineStore("authorization", () => {
   const rules = ref<Record<number, UserRuleDefinitionType>>({});
 
-  const router = useRouter();
   const userStore = useUserStore();
 
+  const ruleExists = (ruleName: string) => !!rules.value[ruleName];
+
   const setRules = (values: Rule[]) => {
-    for (const { name, definition } of values) {
-      rules.value[name] = definition;
-    }
+    for (const { name, definition } of values) rules.value[name] = definition;
   };
 
-  const can = (ruleName: string) => {
-    if (userStore.user && rules.value[ruleName]) {
-      return rules.value[ruleName](userStore.user);
-    }
-    return false;
-  };
+  /**
+   * Check if the user can perform the provided action, specified by a rule name or an array of rule names.
+   * @param {string[] | string} ruleName - Rule name, can be a single string or multiple.
+   * @return Object with multiple values indicating if the user can perform the action or not.
+   * @example
+   * const x = can(RULES.CanViewAdminPanel).do; // true
+   * const y = can(RULES.CanViewAdminPanel).not; // false
+   * const z = can([RULES.CanViewAdminPanel, RULES.CanEditPost]).any; // true
+   */
+  const can = (ruleName: string | string[]) => {
+    let res = {
+      do: false,
+      not: false,
+      any: false
+    };
 
-  const cannot = (ruleName: string) => {
-    if (userStore.user && rules.value[ruleName]) {
-      return !rules.value[ruleName](userStore.user);
+    if (userStore.user) {
+      let $do = false;
+      let any = true;
+
+      if (typeof ruleName === "string") {
+        if (ruleExists(ruleName)) $do = rules.value[ruleName](userStore.user);
+      } else {
+        for (const rule of ruleName) {
+          if (!ruleExists(rule)) {
+            any = false;
+            break;
+          } else {
+            any = any && rules.value[rule](userStore.user);
+          }
+        }
+      }
+
+      res.do = $do;
+      res.not = !$do;
+      res.any = any;
+
+      return res;
     }
-    return false;
+    return res;
   };
 
   const defineRules = () => {
@@ -52,7 +78,6 @@ export const useAuthorizationStore = defineStore("authorization", () => {
   return {
     setRules,
     can,
-    cannot,
     defineRules
   };
 });
